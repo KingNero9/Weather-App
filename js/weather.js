@@ -1,5 +1,5 @@
 let weather = {
-    apiKey: "{2b32d8ff7d770e5be805bf5ffa7a0329",
+    apiKey: "2b32d8ff7d770e5be805bf5ffa7a0329",
     fetchWeather: function (city) {
         fetch(
             "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -39,62 +39,6 @@ let weather = {
         },
     };
     
-    let geocode = {
-        reverseGeocode: function (latitude, longitude) {
-            var apikey = "2cad6041208649f7bacaf9013ad4ec2e";
-            
-            var api_url = "https://api.opencagedata.com/geocode/v1/json";
-            
-            var request_url =
-            api_url +
-            "?" +
-            "key=" +
-            apikey +
-            "&q=" +
-            encodeURIComponent(latitude + "," + longitude) +
-            "&pretty=1" +
-            "&no_annotations=1";
-            
-            var request = new XMLHttpRequest();
-            request.open("GET", request_url, true);
-            
-            request.onload = function () {
-                if (request.status == 200) {
-                    // Success!
-                    var data = JSON.parse(request.responseText);
-                    weather.fetchWeather(data.results[0].components.city);
-                    console.log(data.results[0].components.city)
-                } else if (request.status <= 500) {
-                    // We reached our target server, but it returned an error
-                    
-                    console.log("unable to geocode! Response code: " + request.status);
-                    var data = JSON.parse(request.responseText);
-                    console.log("error msg: " + data.status.message);
-                } else {
-                    console.log("server error");
-                }
-            };
-            
-            request.onerror = function () {
-                // There was a connection error of some sort
-                console.log("unable to connect to server");
-            };
-            
-            request.send(); // make the request
-        },
-        getLocation: function() {
-            function success (data) {
-                geocode.reverseGeocode(data.coords.latitude, data.coords.longitude);
-            }
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(success, console.error);
-            }
-            else {
-                weather.fetchWeather("Ashdod");
-            }
-        }
-    };
-    
     document.querySelector(".search button").addEventListener("click", function () {
         weather.search();
     });
@@ -107,4 +51,4 @@ let weather = {
         }
     });
     
-    geocode.getLocation();
+    weather.fetchWeather("Tel Aviv");
